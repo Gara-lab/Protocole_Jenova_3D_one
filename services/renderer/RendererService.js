@@ -293,29 +293,38 @@ class RendererServiceImplementation {
     return null;
   }
 
-  renderFrame(cameraState) {
-    if (!this.initialized || !this.renderer || !this.camera || !this.scene) {
-      return fail("NotInitialized");
-    }
+renderFrame(cameraState) {
+  if (!this.initialized || !this.renderer || !this.camera || !this.scene) {
+    return fail("NotInitialized");
+  }
 
-    this.camera.position.set(
-      cameraState.position.x,
-      cameraState.position.y,
-      cameraState.position.z
+  this.camera.position.set(
+    cameraState.position.x,
+    cameraState.position.y,
+    cameraState.position.z
+  );
+
+  if (cameraState.target) {
+    this.camera.lookAt(
+      cameraState.target.x,
+      cameraState.target.y,
+      cameraState.target.z
     );
-
+  } else if (cameraState.orientation) {
     this.camera.quaternion.set(
       cameraState.orientation.x,
       cameraState.orientation.y,
       cameraState.orientation.z,
       cameraState.orientation.w
     );
+  }
 
-    this.camera.updateMatrixWorld();
+  this.camera.updateMatrixWorld();
 
-    this.renderer.render(this.scene, this.camera);
+  this.renderer.render(this.scene, this.camera);
 
-    return ok(null);
+  return ok(null);
+}
   }
 
   clearVisuals() {
