@@ -1,79 +1,31 @@
 import * as THREE from "three";
 
-export type RendererFailure =
-  | "InitializationFailed"
-  | "NodeVisualNotFound"
-  | "LinkVisualNotFound"
-  | "NotInitialized";
-
-export type RendererResult<T = null> =
-  | { ok: true; value: T }
-  | { ok: false; reason: RendererFailure };
-
-export type PickedObject = {
-  type: "node" | "link";
-  id: string;
-};
-
-export type Vec3 = {
-  x: number;
-  y: number;
-  z: number;
-};
-
-export type Quaternion = {
-  x: number;
-  y: number;
-  z: number;
-  w: number;
-};
-
-export type CameraState = {
-  position: Vec3;
-  orientation: Quaternion;
-};
-
-export type NodeVisualData = {
-  id: string;
-  position: Vec3;
-};
-
-export type LinkVisualReference = {
-  id: string;
-};
-
-export type LinkVisualData = {
-  id: string;
-  sourcePosition: Vec3;
-  targetPosition: Vec3;
-};
-
-function ok<T>(value: T): RendererResult<T> {
+function ok(value) {
   return { ok: true, value };
 }
 
-function fail<T>(reason: RendererFailure): RendererResult<T> {
+function fail(reason) {
   return { ok: false, reason };
 }
 
 class RendererServiceImplementation {
-  private initialized = false;
-  private canvas: HTMLCanvasElement | null = null;
-  private scene: THREE.Scene | null = null;
-  private renderer: THREE.WebGLRenderer | null = null;
-  private camera: THREE.PerspectiveCamera | null = null;
+  initialized = false;
+  canvas = null;
+  scene = null;
+  renderer = null;
+  camera = null;
 
-  private nodeGeometry: THREE.BoxGeometry | null = null;
-  private nodeMaterial: THREE.MeshStandardMaterial | null = null;
-  private linkMaterial: THREE.LineBasicMaterial | null = null;
+  nodeGeometry = null;
+  nodeMaterial = null;
+  linkMaterial = null;
 
-  private nodeMeshes = new Map<string, THREE.Mesh>();
-  private linkLines = new Map<string, THREE.Line>();
+  nodeMeshes = new Map();
+  linkLines = new Map();
 
-  private raycaster = new THREE.Raycaster();
-  private pointer = new THREE.Vector2();
+  raycaster = new THREE.Raycaster();
+  pointer = new THREE.Vector2();
 
-  initialize(canvasElement: HTMLCanvasElement): RendererResult {
+  initialize(canvasElement) {
     if (this.initialized) {
       return ok(null);
     }
@@ -91,11 +43,18 @@ class RendererServiceImplementation {
 
       const scene = new THREE.Scene();
 
-      const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+      const camera = new THREE.PerspectiveCamera(
+        60,
+        width / height,
+        0.1,
+        1000
+      );
+
       camera.position.set(0, 0, 5);
 
       const ambientLight = new THREE.AmbientLight(0xffffff, 1);
       const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+
       directionalLight.position.set(1, 1, 1);
 
       scene.add(ambientLight);
@@ -125,7 +84,7 @@ class RendererServiceImplementation {
     }
   }
 
-  dispose(): void {
+  dispose() {
     this.clearVisuals();
 
     this.nodeGeometry?.dispose();
@@ -143,7 +102,7 @@ class RendererServiceImplementation {
     this.initialized = false;
   }
 
-  addNodeVisual(node: NodeVisualData): RendererResult {
+  addNodeVisual(node) {
     if (
       !this.initialized ||
       !this.scene ||
@@ -173,7 +132,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  updateNodeVisual(nodeId: string, position: Vec3): RendererResult {
+  updateNodeVisual(nodeId, position) {
     if (!this.initialized || !this.scene) {
       return fail("NotInitialized");
     }
@@ -189,7 +148,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  removeNodeVisual(nodeId: string): RendererResult {
+  removeNodeVisual(nodeId) {
     if (!this.initialized || !this.scene) {
       return fail("NotInitialized");
     }
@@ -206,11 +165,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  addLinkVisual(
-    link: LinkVisualReference,
-    sourcePosition: Vec3,
-    targetPosition: Vec3
-  ): RendererResult {
+  addLinkVisual(link, sourcePosition, targetPosition) {
     if (!this.initialized || !this.scene || !this.linkMaterial) {
       return fail("NotInitialized");
     }
@@ -249,7 +204,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  removeLinkVisual(linkId: string): RendererResult {
+  removeLinkVisual(linkId) {
     if (!this.initialized || !this.scene) {
       return fail("NotInitialized");
     }
@@ -267,10 +222,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  renderGraphSnapshot(
-    nodes: NodeVisualData[],
-    links: LinkVisualData[]
-  ): RendererResult {
+  renderGraphSnapshot(nodes, links) {
     if (!this.initialized || !this.scene) {
       return fail("NotInitialized");
     }
@@ -300,7 +252,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  pickObjectAt(screenX: number, screenY: number): PickedObject | null {
+  pickObjectAt(screenX, screenY) {
     if (!this.initialized || !this.canvas || !this.camera || !this.scene) {
       return null;
     }
@@ -316,7 +268,7 @@ class RendererServiceImplementation {
 
     this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    const objects: THREE.Object3D[] = [
+    const objects = [
       ...this.nodeMeshes.values(),
       ...this.linkLines.values(),
     ];
@@ -324,10 +276,7 @@ class RendererServiceImplementation {
     const hits = this.raycaster.intersectObjects(objects, false);
 
     for (const hit of hits) {
-      const userData = hit.object.userData as {
-        type?: string;
-        id?: string;
-      };
+      const userData = hit.object.userData;
 
       if (
         userData &&
@@ -344,7 +293,7 @@ class RendererServiceImplementation {
     return null;
   }
 
-  renderFrame(cameraState: CameraState): RendererResult {
+  renderFrame(cameraState) {
     if (!this.initialized || !this.renderer || !this.camera || !this.scene) {
       return fail("NotInitialized");
     }
@@ -369,7 +318,7 @@ class RendererServiceImplementation {
     return ok(null);
   }
 
-  private clearVisuals(): void {
+  clearVisuals() {
     if (!this.scene) {
       return;
     }
