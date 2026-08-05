@@ -164,7 +164,14 @@ class RendererServiceImplementation {
 
     return ok(null);
   }
+  
+  getVisualObject(nodeId) {
+    if (!this.initialized) {
+      return null;
+  }
 
+  return this.nodeMeshes.get(nodeId) ?? null;
+}
   addLinkVisual(link, sourcePosition, targetPosition) {
     if (!this.initialized || !this.scene || !this.linkMaterial) {
       return fail("NotInitialized");
