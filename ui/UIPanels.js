@@ -21,12 +21,12 @@ class UIPanelsImplementation {
 
   try {
     const canvas = rootElement.querySelector("#render-canvas");
-    const createNodeButton = rootElement.querySelector("#create-node-button");
-    const deleteNodeButton = rootElement.querySelector("#delete-node-button");
-    const connectModeButton = rootElement.querySelector("#connect-mode-button");
-    const disconnectButton = rootElement.querySelector("#disconnect-button");
-    const exportButton = rootElement.querySelector("#export-button");
-    const importButton = rootElement.querySelector("#import-button");
+    const createNodeButton = rootElement.querySelector("#create-node-btn");
+    const deleteNodeButton = rootElement.querySelector("#delete-node-btn");
+    const connectModeButton = rootElement.querySelector("#connect-mode-btn");
+    const disconnectButton = rootElement.querySelector("#disconnect-btn");
+    const exportButton = rootElement.querySelector("#export-btn");
+    const importButton = rootElement.querySelector("#import-btn");
     const fileInput = rootElement.querySelector("#import-file-input");
 
     if (
@@ -55,10 +55,10 @@ class UIPanelsImplementation {
       fileInput,
     };
 
-    return ok(null);
-      } catch {
-    return fail("InitializationFailed");
-      }
+      return ok(null);
+  } catch {
+      return fail("InitializationFailed");
+  }
 }
     } catch {
       return fail("InitializationFailed");
