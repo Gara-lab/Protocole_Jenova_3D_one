@@ -10,75 +10,56 @@ class UIPanelsImplementation {
   canvas = null;
   controls = null;
 
-  initialize(rootElement) {
-    if (this.canvas && this.controls) {
-      return ok(null);
-    }
+ initialize(rootElement) {
+  if (this.canvas && this.controls) {
+    return ok(null);
+  }
 
-    if (!rootElement || typeof rootElement.appendChild !== "function") {
+  if (!rootElement || typeof rootElement.querySelector !== "function") {
+    return fail("InitializationFailed");
+  }
+
+  try {
+    const canvas = rootElement.querySelector("#render-canvas");
+    const createNodeButton = rootElement.querySelector("#create-node-button");
+    const deleteNodeButton = rootElement.querySelector("#delete-node-button");
+    const connectModeButton = rootElement.querySelector("#connect-mode-button");
+    const disconnectButton = rootElement.querySelector("#disconnect-button");
+    const exportButton = rootElement.querySelector("#export-button");
+    const importButton = rootElement.querySelector("#import-button");
+    const fileInput = rootElement.querySelector("#import-file-input");
+
+    if (
+      !(canvas instanceof HTMLCanvasElement) ||
+      !(createNodeButton instanceof HTMLButtonElement) ||
+      !(deleteNodeButton instanceof HTMLButtonElement) ||
+      !(connectModeButton instanceof HTMLButtonElement) ||
+      !(disconnectButton instanceof HTMLButtonElement) ||
+      !(exportButton instanceof HTMLButtonElement) ||
+      !(importButton instanceof HTMLButtonElement) ||
+      !(fileInput instanceof HTMLInputElement) ||
+      fileInput.type !== "file"
+    ) {
       return fail("InitializationFailed");
     }
 
-    try {
-      const canvas = document.createElement("canvas");
-      canvas.width = 800;
-      canvas.height = 600;
-      canvas.style.display = "block";
+    this.canvas = canvas;
 
-      const controls = document.createElement("div");
+    this.controls = {
+      createNodeButton,
+      deleteNodeButton,
+      connectModeButton,
+      disconnectButton,
+      exportButton,
+      importButton,
+      fileInput,
+    };
 
-      const createNodeButton = document.createElement("button");
-      createNodeButton.type = "button";
-      createNodeButton.textContent = "Create Node";
-
-      const deleteNodeButton = document.createElement("button");
-      deleteNodeButton.type = "button";
-      deleteNodeButton.textContent = "Delete Node";
-
-      const connectModeButton = document.createElement("button");
-      connectModeButton.type = "button";
-      connectModeButton.textContent = "Connect";
-
-      const disconnectButton = document.createElement("button");
-      disconnectButton.type = "button";
-      disconnectButton.textContent = "Disconnect";
-
-      const exportButton = document.createElement("button");
-      exportButton.type = "button";
-      exportButton.textContent = "Export";
-
-      const importButton = document.createElement("button");
-      importButton.type = "button";
-      importButton.textContent = "Import";
-
-      const fileInput = document.createElement("input");
-      fileInput.type = "file";
-      fileInput.accept = ".json,application/json";
-      fileInput.style.display = "none";
-
-      controls.appendChild(createNodeButton);
-      controls.appendChild(deleteNodeButton);
-      controls.appendChild(connectModeButton);
-      controls.appendChild(disconnectButton);
-      controls.appendChild(exportButton);
-      controls.appendChild(importButton);
-      controls.appendChild(fileInput);
-
-      rootElement.appendChild(canvas);
-      rootElement.appendChild(controls);
-
-      this.canvas = canvas;
-      this.controls = {
-        createNodeButton,
-        deleteNodeButton,
-        connectModeButton,
-        disconnectButton,
-        exportButton,
-        importButton,
-        fileInput,
-      };
-
-      return ok(null);
+    return ok(null);
+      } catch {
+    return fail("InitializationFailed");
+      }
+}
     } catch {
       return fail("InitializationFailed");
     }
