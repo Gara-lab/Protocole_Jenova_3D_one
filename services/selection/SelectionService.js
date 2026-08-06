@@ -1,4 +1,4 @@
-import { EventBus } from "../../core/events.js";
+import { EventBus } from "../../core/events/EventBus.js";
 
 function ok(value) {
   return { ok: true, value };
