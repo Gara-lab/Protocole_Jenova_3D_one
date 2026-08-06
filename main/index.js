@@ -5,7 +5,7 @@ import { InteractionService } from "../services/interaction/InteractionService.j
 import { MoveNodeWorkflow } from "../workflows/MoveNodeWorkflow.js";
 import { UIPanels } from "../ui/UIPanels.js";
 import { UIBindings } from "../ui/UIBindings.js";
-import { EventBus } from "../core/events.js";
+import { EventBus } from "../../core/events/EventBus.js";
 
 let frameHandle = 0;
 
