@@ -128,7 +128,13 @@ class CameraServiceImplementation {
       },
     });
   }
+  getCameraInstance() {
+    if (!this.initialized || !this.camera) {
+      return fail("NotInitialized");
+    }
 
+    return ok(this.camera);
+  }
   setCameraState(position, target) {
     if (!this.initialized || !this.camera || !this.controls) {
       return fail("NotInitialized");
