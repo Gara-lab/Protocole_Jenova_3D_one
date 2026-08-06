@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { InteractionService } from "../../../services/interaction/InteractionService.js";
 import { RendererService } from "../../../services/renderer/RendererService.js";
-import { EventBus } from "../../../core/events.js";
+import { EventBus } from "../../../core/events/EventBus.js";
 
 function resetInteraction() {
   InteractionService.initialized = false;
