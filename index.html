@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Graph Editor</title>
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+          "three/addons/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js",
+          "three/addons/controls/TransformControls.js": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/TransformControls.js"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="app-root">
+      <canvas id="render-canvas"></canvas>
+
+      <div id="controls">
+        <button id="create-node-btn" type="button">Create Node</button>
+        <button id="delete-node-btn" type="button">Delete Node</button>
+        <button id="connect-mode-btn" type="button">Connect</button>
+        <button id="disconnect-btn" type="button">Disconnect</button>
+        <button id="export-btn" type="button">Export</button>
+        <button id="import-btn" type="button">Import</button>
+
+        <input
+          id="import-file-input"
+          type="file"
+          accept=".json,application/json"
+          hidden
+        />
+      </div>
+    </div>
+
+    <script type="module" src="./main/index.js"></script>
+  </body>
+</html>
