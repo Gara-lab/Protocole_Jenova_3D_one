@@ -1,6 +1,6 @@
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { RendererService } from "../renderer/RendererService.js";
-import { EventBus } from "../../core/events.js";
+import { EventBus } from "../../core/events/EventBus.js";
 
 function ok(value) {
   return { ok: true, value };
