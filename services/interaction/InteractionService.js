@@ -78,9 +78,11 @@ class InteractionServiceImplementation {
 
       this.controls.detach();
 
-      if (this.controls.parent) {
-        this.controls.parent.remove(this.controls);
-      }
+      const helper = this.controls.getHelper();
+
+      if (helper && helper.parent) {
+        helper.parent.remove(helper);
+    }
 
       this.controls.dispose();
     }
