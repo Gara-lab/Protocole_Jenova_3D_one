@@ -28,7 +28,7 @@ class UIPanelsImplementation {
     const exportButton = rootElement.querySelector("#export-btn");
     const importButton = rootElement.querySelector("#import-btn");
     const fileInput = rootElement.querySelector("#import-file-input");
-  }
+  
     if (
       !(canvas instanceof HTMLCanvasElement) ||
       !(createNodeButton instanceof HTMLButtonElement) ||
@@ -60,10 +60,6 @@ class UIPanelsImplementation {
       return fail("InitializationFailed");
   }
 }
-    } catch {
-      return fail("InitializationFailed");
-    }
-  }
 
   getCanvasElement() {
     return this.canvas;
