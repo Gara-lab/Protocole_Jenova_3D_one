@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { SelectionService } from "../../../services/selection/SelectionService.js";
-import { EventBus } from "../../../core/events.js";
+import { EventBus } from "../../../core/events/EventBus.js";
 
 function resetSelection() {
   SelectionService.selectedId = null;
