@@ -70,11 +70,11 @@ function startFrameLoop() {
 }
 
 function start() {
-  const rootElement = document.getElementById("app") ?? document.body;
+  const rootElement = document.getElementById("app-root");
 
-  if (!rootElement) {
-    throw compositionError("RootElement");
-  }
+    if (!rootElement) {
+      throw compositionError("RootElement");
+}
 
   const graph = createGraph();
 
