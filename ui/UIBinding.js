@@ -104,32 +104,58 @@ export const UIBindings = {
 
         if (!selectedId) {
           return;
-        }
+    }
 
-        run(() => InteractionStateService.beginConnectMode(selectedId));
-        return;
+        run(() => {
+          const result = InteractionStateService.beginConnectMode(selectedId);
+
+          if (result.ok) {
+            connectModeButton.classList.add("connect-mode-active");
       }
+
+          return result;
+    });
+
+        return;
+  }
 
       if (mode === "awaitingSecondNode") {
         const firstNodeId = InteractionStateService.getPendingFirstNodeId();
         const secondNodeId = SelectionService.getSelectedId();
 
         if (!firstNodeId) {
-          run(() => InteractionStateService.resetConnectMode());
-          return;
+          run(() => {
+            const result = InteractionStateService.resetConnectMode();
+
+            if (result.ok) {
+              connectModeButton.classList.remove("connect-mode-active");
         }
+
+            return result;
+      });
+
+          return;
+    }
 
         if (!secondNodeId || firstNodeId === secondNodeId) {
           return;
-        }
+    }
 
         run(() =>
           ConnectNodesWorkflow.execute(graph, firstNodeId, secondNodeId)
-        );
+    );
 
-        run(() => InteractionStateService.resetConnectMode());
+        run(() => {
+          const result = InteractionStateService.resetConnectMode();
+
+          if (result.ok) {
+            connectModeButton.classList.remove("connect-mode-active");
       }
+
+          return result;
     });
+  }
+});
 
     disconnectButton.addEventListener("click", () => {
       const linkId = InteractionStateService.getSelectedLinkId();
