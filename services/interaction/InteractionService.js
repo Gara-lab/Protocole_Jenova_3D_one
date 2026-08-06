@@ -110,10 +110,11 @@ class InteractionServiceImplementation {
 
     const scene = this.findScene(visual);
 
-    if (scene && this.controls.parent !== scene) {
-      scene.add(this.controls);
-    }
+    const helper = this.controls.getHelper();
 
+    if (scene && helper && helper.parent !== scene) {
+      scene.add(helper);
+    }
     return ok(null);
   }
 
